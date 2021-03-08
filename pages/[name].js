@@ -4,14 +4,22 @@ const cheerio = require('cheerio')
 const Concept = (props) => {
     const { isFallback } = useRouter();
     return (
-        <div className="infobox p-6 mt-10 max-w-lg mx-auto bg-white rounded-xl shadow-md  items-center space-x-4" 
+        <table className="infobox vcard p-6 m-10 max-w-lg mx-auto bg-white rounded-xl shadow-md  items-center space-x-4" 
             dangerouslySetInnerHTML={{ __html: props.infobox }} />
     );
 }
 
 export async function getStaticProps({params}) {
 
-    const res = await fetch(`https://en.wikipedia.org/wiki/${params.name}`)
+    const res = await fetch(`https://en.wikipedia.org/wiki/${params.name}`, {
+        headers: {
+            'Host': 'en.wikipedia.org',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+            'accept-language': 'en-us',
+            'referer': 'https://en.wikipedia.org/',
+        }
+    })
     //console.log (await res.text());
     const $ = cheerio.load(await res.text())
 
